@@ -2,15 +2,25 @@ import { IEvent } from "../domain/IEvent";
 import httpClient from "../utils/httpclient";
 
 export class EventService {
-    private basePath = 'Event'
+    private static basePath = 'Event'
 
-    async getAll(): Promise<IEvent[]> {
+    static async getAll(): Promise<IEvent[]> {
         console.log("getAll");
         const response = await httpClient.get(`/${this.basePath}`);
-    console.log(response);
+        console.log(response);
 
-    const res = response.data as IEvent[];
-    return res;
-  }
+        const res = await response.data as IEvent[];
+        return res;
+    }
+
+    static async add(event: IEvent): Promise<string> {
+        console.log("add");
+        console.log(event);
+        const response = await httpClient.post(`/${this.basePath}`, event);
+        console.log(response);
+
+        const res = await response.data as string;
+        return res;
+    }
 
 }

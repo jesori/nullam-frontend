@@ -6,11 +6,9 @@ type Props = {
 }
 export const Layout:React.FC<Props> = ({ children }) => {
     return (
-        <div className='flex flex-col justify-center w-[65rem] h-screen'>
+        <div className='flex flex-col w-full h-full'>
             <Header />
-            <main className='w-full h-full'>
-                {children}
-            </main>
+            {children}
             <Footer />
         </div>
     )

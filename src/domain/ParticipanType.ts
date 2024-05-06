@@ -1,0 +1,1 @@
+export type ParticipantType = 'private' | 'business'

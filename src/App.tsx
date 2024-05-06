@@ -3,9 +3,10 @@ import { useRoutes } from 'react-router-dom'
 import { AddEvent } from './pages/AddEvent'
 import { Home } from './pages/Home'
 import { Layout } from './composents/Layout'
+import { Addprticipant } from './pages/Addprticipant'
 
 function App() {
-  let element = useRoutes(
+  const element = useRoutes(
     [
       {
         path: "/",
@@ -14,6 +15,10 @@ function App() {
       {
         path: "/addEvent",
         element: <AddEvent />,
+      },
+      {
+        path: "/addParticipant",
+        element: <Addprticipant />,
       },
 
     ]

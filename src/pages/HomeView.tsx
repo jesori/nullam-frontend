@@ -19,7 +19,7 @@ export const HomeView = () => {
     }, []);
     return (
         <div className='h-full w-full flex flex-col'>
-            <div className='bg-[#005aa0] w-full h-[270px] flex flex-row'>
+            <div className='bg-[#005aa0] w-full h-[15rem] flex flex-row'>
                 {/* <div className="basis-1/2 h-full  text-white font-light text-center text-xl self-center align-middle">
                     asd
                 </div> */}

@@ -4,6 +4,7 @@ import { EventService } from '../services/EventService'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import { useServiceContext } from '../context/ServiceContext'
+import { PageHeader } from './PageHeader'
 
 type Props = {
     className?: string
@@ -19,7 +20,7 @@ export const OngoingEvents: React.FC<Props> = ({className}) => {
         const getData = async () => {
             try {
                 const data = await eventServeice.getAll();
-                setEvents(data)
+                setEvents(data.filter(e => moment(e.date).isAfter(Date.now())))
             } catch (error) {
                 console.log(error);
             }
@@ -29,9 +30,9 @@ export const OngoingEvents: React.FC<Props> = ({className}) => {
 
     return (
         <div className={`${className} flex flex-col`}>
-        <div className='bg-[#005aa1] h-[70px] flex justify-center'>
+        <div className='bg-[#005aa1] h-[5rem] flex justify-center'>
             <p className='self-center font-medium text-white'>
-                Tulevased uritused
+                Tulevased üritused
             </p>
             </div>
             <div className='bg-white h-full '>

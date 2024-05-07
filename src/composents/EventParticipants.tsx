@@ -34,7 +34,7 @@ export const EventParticipants:React.FC<EventParticipantsProps> = ({ id }) => {
         }
     }
   return (
-    <div className='w-[400px] h-full'>
+    <div className='w-[25rem] h-full'>
             {participants != null && participants.map((p, index) => (
                 <div key={index} className='w-full mt-2 text-slate-500 text-start justify-items-start gap-3  grid grid-cols-[10px_1fr_auto_auto_auto]'>
                     <p>{index + 1}.</p>

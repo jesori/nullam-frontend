@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useServiceContext } from '../context/ServiceContext'
 import { IPatricipant } from '../domain/IParticipant'
+import { Button } from '@mui/joy'
 
 type AddExistingParticipantProps = {
     eventId?: string
@@ -50,11 +51,11 @@ export const AddExistingParticipant:React.FC<AddExistingParticipantProps> = ({ e
             </select>
             <div className='flex flex-row space-x-4 mt-5'>
                 <Link to={'/'}>
-                    <button className='bg-[#e1e1e1] px-3'>Tagasi</button>
+                    <Button color="neutral" size='sm' className='bg-[#e1e1e1] px-3'>Tagasi</Button>
                 </Link>
-                <button className='bg-[#005aa1] text-white px-3' onClick={() => addSelectedToEvent()}  >
+                <Button size='sm' className='bg-[#005aa1] text-white px-3' onClick={() => addSelectedToEvent()}  >
                     <p>Lisa</p>
-                </button>
+                </Button>
             </div>
         </div>
     )

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useServiceContext } from '../context/ServiceContext';
 import { ParticipantType } from '../domain/ParticipanType';
 import { PaymentMethod } from '../domain/PaymentMethod';
+import { Button } from '@mui/joy';
 
 export type FormData = {
     type: ParticipantType,
@@ -82,7 +83,7 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
             }
         }
     return (
-        <div className='flex flex-col w-[350px] h-fit'>
+        <div className='flex flex-col w-[20rem] h-fit'>
             <p className='text-2xl self-start text-[#005aa1] mt-5'>Osavõtjs nimi</p>
             <div className='mt-5'>
 
@@ -206,7 +207,7 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
                     <p>Lisainfo:</p>
                     <textarea
                         maxLength={1500}
-                        className='border w-full col-span-2 h-[50px] text-start'
+                        className='border w-full col-span-2 h-[3rem] text-start'
                         name="isGoing"
                         value={formData.info}
                         onChange={(e) => setFormData({
@@ -215,14 +216,14 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
                         })} />
                     <div className='flex flex-row space-x-4 mt-5'>
                         <Link to={'/'}>
-                            <button className='bg-[#e1e1e1] px-3'>Tagasi</button>
+                            <Button color="neutral" size='sm' className='bg-[#e1e1e1] px-3'>Tagasi</Button>
                         </Link>
-                        <button className='bg-[#005aa1] text-white px-3' type="submit"  >
+                        <Button size='sm' className='bg-[#005aa1] text-white px-3' type="submit"  >
                             {eventId ?
                                 <p>Lisa</p> :
                                 <p>Slvesta</p>
                             }
-                        </button>
+                        </Button>
                     </div>
                 </div>
             </form>

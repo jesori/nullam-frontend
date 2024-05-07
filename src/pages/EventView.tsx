@@ -8,6 +8,7 @@ import { FormData, ParticipantFrom } from '../composents/ParticipantFrom'
 import { IBusinessParticipant } from '../domain/IBusinessParticipant'
 import { IPrivateParticipant } from '../domain/IPrivateParticipant'
 import { AddExistingParticipant } from '../composents/AddExistingParticipant'
+import { PageHeader } from '../composents/PageHeader'
 
 export const EventView = () => {
     const { id } = useParams()
@@ -63,15 +64,11 @@ export const EventView = () => {
     }
     return (
         <div className='flex flex-col h-full'>
-            <div className='bg-[#005aa1] h-[70px] flex justify-center'>
-                <p className='self-center font-medium text-white'>
-                    Osavotjad
-                </p>
-            </div>
+            <PageHeader content='Osavõtjad'/>
             <div className='flex flex-col  w-full bg-white h-full py-3'>
-                <div className='flex flex-col bg-green-200 w-[350px] self-center h-fit'>
+                <div className='flex flex-col bg-green-200 w-[25rem] self-center h-fit'>
 
-                    <p className='text-2xl self-start text-[#005aa1] mt-3'>Osavotjad</p>
+                    <p className='text-2xl self-start text-[#005aa1] mt-3'>Osavõtjad</p>
                     {event != null &&
                         <div className='mt-5 w-full grid gap-3 grid-cols-3 h-fit self-center text-start'>
                             <p>Urituse nimi:</p>

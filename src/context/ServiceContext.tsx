@@ -9,7 +9,7 @@ export type Services = {
     privateParticipantService: PrivateParticipantService,
     businessParticipantService: BusinessParticipantService,
     eventServeice: EventService
-    particiPantservice: ParticipantService
+    participantService: ParticipantService
 }
 
 export type ServiceContextType = {
@@ -27,7 +27,7 @@ export const ServiceProvider: React.FC<ServiceProviderProps> = ({ children }) =>
         privateParticipantService: new PrivateParticipantService(),
         businessParticipantService: new BusinessParticipantService(),
         eventServeice: new EventService(),
-        particiPantservice: new ParticipantService()
+        participantService: new ParticipantService()
     });
     return <ServiceContex.Provider value={{services}}>{ children }</ServiceContex.Provider>
 };

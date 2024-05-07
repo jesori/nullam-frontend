@@ -4,13 +4,15 @@ import "react-datepicker/dist/react-datepicker.css";
 import { EventService } from '../services/EventService';
 import { IEvent } from '../domain/IEvent';
 import { Link, useNavigate } from 'react-router-dom';
+import { useServiceContext } from '../context/ServiceContext';
 
 export const AddEventView = () => {
     const navigate  = useNavigate()
     const [name, setName] = useState<string>('');
     const [location, setLocation] = useState<string>('');
-    const [eventDate, setEventDate] = useState<Date>(new Date);
+    const [eventDate, setEventDate] = useState<Date | null>(new Date);
     const [info, setInfo] = useState<string>('');
+    const { services } = useServiceContext();
     useEffect(() => {
         console.log(name);
 
@@ -24,7 +26,7 @@ export const AddEventView = () => {
                 date: eventDate,
                 info: info
             }
-            const res = await EventService.add(event)
+            const res = await services.eventServeice.add(event)
             if (res) {
                 navigate('/')
             }

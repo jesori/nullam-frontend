@@ -26,15 +26,6 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
         privateParticipantService,
     } } = useServiceContext()
 
-    console.log(initialData);
-    // const formData = useRef<FormData>({
-    //     type: 'private',
-    //     firstName: '',
-    //     lastName: '',
-    //     paymentMethod: PaymentMethod.InCache,
-    //     idNumber: '',
-    //     info: ''
-    // });
     const [formData, setFormData] = useState<FormData>({
         type: 'private',
         firstName: '',
@@ -48,9 +39,6 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
 
     useEffect(() => {
         if (initialData) {   
-            console.log('formData');
-            console.log(formData);
-            
             setFormData(initialData)
         }
         
@@ -70,11 +58,16 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
                 newErrors.push('Last name is required');
                 valid = false;
             }
-        }
-
-        if (!privateParticipantService.validateId(formData.idNumber)) {
-            newErrors.push('Id number required or not valid');
-            valid = false;
+            
+            if (!privateParticipantService.validateId(formData.idNumber)) {
+                newErrors.push('Id number required or not valid');
+                valid = false;
+            }
+        } else {
+            if (!formData.idNumber) {
+                newErrors.push('Id Code required or not valid');
+                valid = false;
+            }
         }
 
         setErrors(newErrors);
@@ -90,7 +83,7 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
         }
     return (
         <div className='flex flex-col w-[350px] h-fit'>
-            <p className='text-2xl self-start text-[#005aa1] mt-5'>Urituse lisamine</p>
+            <p className='text-2xl self-start text-[#005aa1] mt-5'>Osavõtjs nimi</p>
             <div className='mt-5'>
 
                 {errors.length > 0 && errors.map((e, index) => (

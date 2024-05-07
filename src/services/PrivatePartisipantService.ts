@@ -13,9 +13,26 @@ export class PrivateParticipantService {
         return res;
     }
 
+    async getAll(): Promise<IPrivateParticipant[]> {
+        console.log("getAll");
+        const response = await httpClient.get(`/${this.basePath}`);
+        console.log(response);
+
+        const res = await response.data as IPrivateParticipant[];
+        return res;
+    }
+
+    async add(data: IPrivateParticipant): Promise<string> {
+        console.log("getAll");
+        const response = await httpClient.post(`/${this.basePath}`, data);
+        console.log(response);
+
+        return response.data as string;
+    }
+
     async put(id: string, data: IPrivateParticipant): Promise<number> {
         console.log("getAll");
-        const response = await httpClient.put(`/privateparticipant/${id}`, data);
+        const response = await httpClient.put(`/${this.basePath}/${id}`, data);
         console.log(response);
 
         return response.status;

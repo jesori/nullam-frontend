@@ -8,29 +8,30 @@ type EventParticipantsProps = {
 }
 export const EventParticipants:React.FC<EventParticipantsProps> = ({ id }) => {
     const { services: {
-        particiPantservice
+        participantService,
+        eventServeice
     } } = useServiceContext()
     const [participants, setParticipants] = useState<IPatricipant[]>()
-    const getEvent = async () => {
-        const participants = await particiPantservice.getAllForEvent(id)
+    const getParticipants = async () => {
+        const participants = await participantService.getAllForEvent(id)
 
         if (participants) {
             console.log(participants);
             
             setParticipants(participants)
         }
-
-        // if (privat) {
-        //     console.log(private);
-        // }
     }
     useEffect(() => {
-        
-        getEvent()
+        getParticipants()
     }, []);
 
-    const removeParticipant = () => {
-        // particiPantservice.
+    const removeParticipant = async (id?: string) => {
+        if (id) {
+            const res = await eventServeice.removeBusinessParticipantFromEvent(id)
+            if (res < 300) {
+                getParticipants()
+            }
+        }
     }
   return (
     <div className='w-[400px] h-full'>
@@ -40,7 +41,7 @@ export const EventParticipants:React.FC<EventParticipantsProps> = ({ id }) => {
                     <p>{p.name}</p>
                     <p className='self-start text-start'>{p.idNumber}</p>
                     <Link to={{pathname:`/participant/${p.id}`,search: `?type=${p.type}`}}>VAATA</Link>
-                    <button>KUSTUTA</button>
+                    <button onClick={() => removeParticipant(p.participantEventId)}>KUSTUTA</button>
                 </div>
             ))}</div>
     )

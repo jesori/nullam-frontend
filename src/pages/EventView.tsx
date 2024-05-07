@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useServiceContext } from '../context/ServiceContext'
 import { IEvent } from '../domain/IEvent'
 import moment from 'moment'
@@ -7,22 +7,24 @@ import { EventParticipants } from '../composents/EventParticipants'
 import { FormData, ParticipantFrom } from '../composents/ParticipantFrom'
 import { IBusinessParticipant } from '../domain/IBusinessParticipant'
 import { IPrivateParticipant } from '../domain/IPrivateParticipant'
+import { AddExistingParticipant } from '../composents/AddExistingParticipant'
 
 export const EventView = () => {
     const { id } = useParams()
     const {services} = useServiceContext()
     const [event, setEvent] = useState<IEvent>()
+    const navigate = useNavigate()
 
-    useEffect(() => {
-        const getEvent = async () =>{
-            if (id) {
-                const event = await services.eventServeice.getById(id)
+    const getEvent = async () =>{
+        if (id) {
+            const event = await services.eventServeice.getById(id)
 
-                if (event) {
-                    setEvent(event)
-                }
+            if (event) {
+                setEvent(event)
             }
         }
+    }
+    useEffect(() => {
         getEvent()
     }, []);
 
@@ -33,9 +35,12 @@ export const EventView = () => {
                     id: id,
                     ...data,
                 }
-                const res = await services.eventServeice.addPrivateParticipantToEvent(id, privateData);
-                if (res < 300) {
-                    navigate('/')
+                const addPart = await services.privateParticipantService.add(privateData);
+                if (addPart) {
+                    const res = await services.eventServeice.addPrivateParticipantToEvent(id, addPart);
+                    if (res < 300) {
+                        getEvent()
+                    }
                 }
             }
             if (data.type === 'business') {
@@ -46,9 +51,12 @@ export const EventView = () => {
                     participantsNumber: data.participantsNumber,
                     paymentMethod: data.paymentMethod
                 }
-                const res = await services.businessParticipantService.put(id, businessData);
-                if (res < 300) {
-                    navigate('/')
+                const addPart = await services.businessParticipantService.add(businessData);
+                if (addPart) {
+                    const res = await services.eventServeice.addBusinessParticipantToEvent(id, addPart);
+                    if (res < 300) {
+                        getEvent()
+                    }
                 }
             }
         }
@@ -83,7 +91,8 @@ export const EventView = () => {
                 </div>
                 <div className=' self-center h-full flex bg-orange-200'>
                     <div className='self-end h-fit bg-blue-100'>
-                    <ParticipantFrom eventId={id} onSubmit={addParticipant}/>
+                        <AddExistingParticipant eventId={id} />
+                        <ParticipantFrom eventId={id} onSubmit={addParticipant} />
                     </div>
                 </div>
             </div>

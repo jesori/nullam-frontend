@@ -13,7 +13,24 @@ export class BusinessParticipantService {
         const res = await response.data as IBusinessParticipant[];
         return res;
     }
-    
+
+    async getAll(): Promise<IBusinessParticipant[]> {
+        console.log("getAll");
+        const response = await httpClient.get(`/${this.basePath}`);
+        console.log(response);
+
+        const res = await response.data as IBusinessParticipant[];
+        return res;
+    }
+
+    async add(data: IBusinessParticipant): Promise<string> {
+        console.log("getAll");
+        const response = await httpClient.post(`/${this.basePath}`, data);
+        console.log(response);
+
+        return response.data as string;
+    }
+
     async put(id: string, data: IBusinessParticipant): Promise<number> {
         console.log("put");
         const response = await httpClient.put(`/${this.basePath}/${id}`, data);

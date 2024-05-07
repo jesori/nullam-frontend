@@ -50,4 +50,33 @@ export class ParticipantService {
         return participants.sort((a, b) => a.name.localeCompare(b.name));
     }
 
+    async getAll(): Promise<IPatricipant[]> {
+        console.log("getAllpart");
+        const privatePart = await this.privateParticipantService.getAll();
+        const busines = await this.businessParticipantService.getAll();
+        
+        const participants: IPatricipant[] = []
+
+        busines.forEach(p => {
+            participants.push({
+                id: p.id,
+                name: p.name,
+                idNumber: p.idNumber,
+                paymentMethod: p.paymentMethod,
+                type: 'business'
+            })
+        });
+        privatePart.forEach(p => {
+            participants.push({
+                id: p.id,
+                participantEventId: p.id,
+                name: [p.firstName, p.lastName].join(" "),
+                idNumber: p.idNumber,
+                paymentMethod: p.paymentMethod,
+                type: 'private'
+            })
+        })
+        return participants.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
 }

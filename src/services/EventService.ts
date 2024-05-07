@@ -44,10 +44,16 @@ export class EventService {
 
     async addBusinessParticipantToEvent(eventId: string, participantId: string): Promise<number> {
         console.log("addprivate");
-        const response = await httpClient.post(`/${this.basePath}/${eventId}/addBudiness`, {
+        const response = await httpClient.post(`/${this.basePath}/${eventId}/addBusiness`, {
             eventId: eventId,
             businessParticipantId: participantId
         });
+        return response.status;
+    }
+
+    async removeBusinessParticipantFromEvent(eventParticipantId: string): Promise<number> {
+        console.log("removeparticipant");
+        const response = await httpClient.delete(`/${this.basePath}/removeParticipant/${eventParticipantId}`);
         return response.status;
     }
 

@@ -1,91 +1,103 @@
-import { FormEvent, useContext, useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
-import { PaymentMethod } from '../domain/PaymentMethod';
-import { ParticipantType } from '../domain/ParticipanType';
-import { PrivateParticipantService } from '../services/PrivatePartisipantService';
-import { ServiceContex, useServiceContext } from '../context/ServiceContext';
+import { useEffect, useState } from 'react'
+import { FormData, ParticipantFrom } from '../composents/ParticipantFrom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useServiceContext } from '../context/ServiceContext';
+import { IPrivateParticipant } from '../domain/IPrivateParticipant';
+import { IBusinessParticipant } from '../domain/IBusinessParticipant';
 
-type FormErrors = {
-    firstName?: string;
-    lastName?: string;
-    payment?: string;
-    idNumer?: string;
-}
 
-export const Addprticipant = () => {
-    const { services: {
-        privateParticipantService
-    } } = useServiceContext()
+
+export const EditParticipantView = () => {
+    const { id, } = useParams();
+    const [searchParams] = useSearchParams();
+    const { services } = useServiceContext()
     const navigate = useNavigate()
-    const [firstName, setFrstName] = useState<string>('');
-    const [lastName, setLastName] = useState<string>('');
-    const [payment, setPayment] = useState<PaymentMethod>('ByCard');
-    const [type, setType] = useState<ParticipantType>('private');
-    const [idNumer, setIdNumber] = useState<string>('');
-    const [info, setInfo] = useState<string>('');
+    const [initialData, setInitialData] = useState<FormData>()
 
-    const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        payment: '',
-        idNumer: '',
-    });
-    const [errors, setErrors] = useState<string[]>([]);
-
-    const validateForm = () => {
-
-        let valid = true;
-        const newErrors: string[] = [];
-        if (formData.firstName.trim().length <= 0) {
-            newErrors.push(type === 'private' ? 'Eesnimi on kohustuslik' : 'Ettevõtenimi on kohustuslik');
-            valid = false;
-        }
-
-        if (type === 'private') {
-            if (!formData.lastName.trim()) {
-                newErrors.push('Last name is required');
-                valid = false;
+    useEffect(() => {
+        const getEvent = async () => {
+            if (searchParams && id) {
+                if (searchParams.get('type') == 'private') {
+                    
+                    const part = await services.privateParticipantService.getById(id)
+                    if (part) {
+                        setInitialData({
+                            firstName: part.firstName,
+                            lastName: part.lastName,
+                            type: 'private',
+                            paymentMethod: part.paymentMethod,
+                            idNumber: part.idNumber,
+                            participantsNumber: 0,
+                            info: part.info
+                        })
+                    }
+                }
+                if (searchParams.get('type') == 'business') {
+                    const part = await services.businessParticipantService.getById(id)
+                    if (part) {
+                        setInitialData({
+                            firstName: part.name,
+                            lastName: '',
+                            type: 'business',
+                            paymentMethod: part.paymentMethod,
+                            idNumber: part.idNumber,
+                            participantsNumber: 0,
+                            info: part.info
+                       })
+                    }
+                }
             }
         }
+        getEvent()
+    }, []);
 
-        if (!privateParticipantService.validateId(formData.idNumer)) {
-            newErrors.push('Id number required or not valid');
-            valid = false;
-        }
-
-        if (formData.payment.length < 6) {
-            newErrors.push('Payment method must be selected!');
-            valid = false;
-        }
-
-        setErrors(newErrors);
-        return valid;
-    };
-    useEffect(() => {
-        console.log(name);
-
-    }, [name]);
-
-    const addParticipant = async (event: FormEvent<HTMLFormElement>) => {
-        console.log('asd');
-
-        event.preventDefault()
-        if (validateForm()) {
-            console.log('asd2');
-
-            // const event: IPrivateParticipant = {
-            //     name: name,
-            //     location: location,
-            //     date: eventDate,
-            //     info: info
-            // }
-            // const res = await EventService.add(event)
-            // if (res) {
-            //     navigate('/')
-            // }
-
+    const updateParticipant = async (data: FormData) => {
+        if (id) {
+            if (data.type === 'private') {
+                const privateData: IPrivateParticipant = {
+                    id: id,
+                    ...data,
+                }
+                const res = await services.privateParticipantService.put(id, privateData);
+                if (res < 300) {
+                    navigate('/')
+                }
+            }
+            if (data.type === 'business') {
+                const businessData: IBusinessParticipant = {
+                    id: id,
+                    name: data.firstName,
+                    idNumber: data.idNumber,
+                    participantsNumber: data.participantsNumber,
+                    paymentMethod: data.paymentMethod
+                }
+                const res = await services.businessParticipantService.put(id, businessData);
+                if (res < 300) {
+                    navigate('/')
+                }
+            }
         }
     }
+    // const addParticipant = async (event: FormEvent<HTMLFormElement>) => {
+    //     console.log('asd');
+
+    //     event.preventDefault()
+    //     if (validateForm()) {
+    //         console.log(formData);
+
+    //         // const event: IPrivateParticipant = {
+    //         //     name: name,
+    //         //     location: location,
+    //         //     date: eventDate,
+    //         //     info: info
+    //         // }
+    //         // const res = await EventService.add(event)
+    //         // if (res) {
+    //         //     navigate('/')
+    //         // }
+
+    //     }
+    // }
     return (
         <div className='flex flex-col h-full'>
             <div className='bg-[#005aa1] h-[70px] flex justify-center'>
@@ -94,7 +106,8 @@ export const Addprticipant = () => {
                 </p>
             </div>
             <div className='bg-white flex justify-center h-full p-3'>
-                <div className='flex flex-col w-[350px] h-fit'>
+                <ParticipantFrom initialData={initialData} onSubmit={updateParticipant} />
+                {/* <div className='flex flex-col w-[350px] h-fit'>
                     <p className='text-2xl self-start text-[#005aa1] mt-5'>Urituse lisamine</p>
                     <div className='mt-5'>
 
@@ -110,25 +123,31 @@ export const Addprticipant = () => {
                                     <input
                                         required
                                         className='mr-2'
-                                        checked={type === 'private'}
+                                        checked={formData.type === 'private'}
                                         type="radio"
                                         value="private"
-                                        onChange={() => setType('private')}
+                                        onChange={() => setFormData({
+                                            ...formData,
+                                            type: 'private'
+                                        })}
                                     />
                                     Eraisik
                                 </label>
                                 <label className='basis-1/2'>
                                     <input
                                         className='mr-2'
-                                        checked={type === 'business'}
+                                        checked={formData.type === 'business'}
                                         type="radio"
                                         value="business"
-                                        onChange={() => setType('business')}
+                                        onChange={() => setFormData({
+                                            ...formData,
+                                            type: 'business'
+                                        })}
                                     />
                                     Ettevõte
                                 </label>
                             </div>
-                            {type === 'business' ?
+                            {formData.type === 'business' ?
                                 <>
                                     <p> Nimi :</p>
                                     <input
@@ -194,7 +213,10 @@ export const Addprticipant = () => {
                                 maxLength={1500}
                                 className='border w-full col-span-2 h-[50px] text-start'
                                 name="isGoing"
-                                onChange={(e) => setInfo(e.target.value)} />
+                                onChange={(e) => setFormData({
+                                    ...formData,
+                                    info: e.target.value
+                                })} />
                             <div className='flex flex-row space-x-4 mt-5'>
                                 <Link to={'/'}>
                                     <button className='bg-[#e1e1e1] px-3'>Tagasi</button>
@@ -205,7 +227,7 @@ export const Addprticipant = () => {
                             </div>
                         </div>
                     </form>
-                </div>
+                </div> */}
             </div>
         </div>
     )

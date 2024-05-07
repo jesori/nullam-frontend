@@ -1,12 +1,15 @@
 import { useEffect } from 'react';
 import image from '../assets/pilt.jpg'
-import { EventService } from '../services/EventService';
 import { OngoingEvents } from '../composents/OngoingEvents';
 import { PastEvents } from '../composents/PastEvents';
-export const Home = () => {
+import { useServiceContext } from '../context/ServiceContext';
+export const HomeView = () => {
+    const { services: {
+        eventServeice
+    } } = useServiceContext()
     useEffect(() => {
         const getData =  async () => {
-            const events = await EventService.getAll()
+            const events = await eventServeice.getAll()
             console.log(events);
 
         }

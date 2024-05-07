@@ -1,11 +1,12 @@
+import { ParticipantType } from "./ParticipanType";
 import { PaymentMethod } from "./PaymentMethod";
 
-export interface IBusinessParticipant {
+export interface IPatricipant {
     id?: string;
+    participantEventId?: string;
     name: string;
     idNumber: string;
-    participantsNumber: number;
+    type: ParticipantType;
     paymentMethod: PaymentMethod;
     info?: string;
-
-}
+} 

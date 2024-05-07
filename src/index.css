@@ -16,3 +16,7 @@ body {
   min-height: 520px;
 }
 
+html {
+    font-size: 12px;
+  }
+

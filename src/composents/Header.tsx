@@ -5,7 +5,7 @@ export const Header = () => {
     return (
         <div className='w-full h-[70px] bg-white my-5'>
             <Link to='/'>Home</Link>
-            <Link to='/addEvent'>AddEvent</Link>
+            <Link to='/addevent'>AddEvent</Link>
         </div>
     )
 }

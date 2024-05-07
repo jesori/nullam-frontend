@@ -4,8 +4,8 @@ export interface IPrivateParticipant {
     id?: string;
     firstName: string;
     lastName: string;
-    idNumber: Date;
-    PaymentMethod: PaymentMethod;
+    idNumber: string;
+    paymentMethod: PaymentMethod;
     info?: string;
 
 }

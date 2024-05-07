@@ -1,15 +1,33 @@
 import { IBusinessParticipant } from "../domain/IBusinessParticipant";
+import { IPrivateParticipant } from "../domain/IPrivateParticipant";
 import httpClient from "../utils/httpclient";
 
 export class BusinessParticipantService {
-    private basePath = 'PrivateParticipant'
+    private basePath = 'businessparticipant'
 
-    async getAll(): Promise<IBusinessParticipant[]> {
+    async getAllForEvent(id: string): Promise<IBusinessParticipant[]> {
         console.log("getAll");
-        const response = await httpClient.get(`/${this.basePath}`);
+        const response = await httpClient.get(`/event/${id}/getAllBusiness`);
         console.log(response);
 
         const res = await response.data as IBusinessParticipant[];
+        return res;
+    }
+    
+    async put(id: string, data: IBusinessParticipant): Promise<number> {
+        console.log("put");
+        const response = await httpClient.put(`/${this.basePath}/${id}`, data);
+        console.log(response);
+
+        return response.status;
+    }
+
+    async getById(id: string): Promise<IBusinessParticipant> {
+        console.log("getById");
+        const response = await httpClient.get(`/${this.basePath}/${id}`);
+        console.log(response);
+
+        const res = await response.data as IBusinessParticipant;
         return res;
     }
 

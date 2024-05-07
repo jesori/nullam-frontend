@@ -1,24 +1,29 @@
 import './App.css'
 import { useRoutes } from 'react-router-dom'
-import { AddEvent } from './pages/AddEvent'
-import { Home } from './pages/Home'
+import { AddEventView } from './pages/AddEventView'
+import { HomeView } from './pages/HomeView'
 import { Layout } from './composents/Layout'
-import { Addprticipant } from './pages/Addprticipant'
+import { EditParticipantView } from './pages/EditPrticipantView'
+import { EventView } from './pages/EventView'
 
 function App() {
   const element = useRoutes(
     [
       {
         path: "/",
-        element: <Home />,
+        element: <HomeView />,
       },
       {
-        path: "/addEvent",
-        element: <AddEvent />,
+        path: "/addevent",
+        element: <AddEventView />,
       },
       {
-        path: "/addParticipant",
-        element: <Addprticipant />,
+        path: "/event/:id",
+        element: <EventView/>,
+      },
+      {
+        path: "/participant/:id",
+        element: <EditParticipantView />,
       },
 
     ]

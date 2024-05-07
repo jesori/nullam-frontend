@@ -1,16 +1,18 @@
-import {  ReactNode, createContext, useContext, useState } from 'react';
+import {  ReactNode, useContext, useState } from 'react';
 import { PrivateParticipantService } from '../services/PrivatePartisipantService';
 import { BusinessParticipantService } from '../services/BusinessPartisipantService';
 import { EventService } from '../services/EventService';
 import React from 'react';
+import { ParticipantService } from '../services/ParticipantService';
 
-type Services = {
+export type Services = {
     privateParticipantService: PrivateParticipantService,
     businessParticipantService: BusinessParticipantService,
-    eventserveice: EventService
+    eventServeice: EventService
+    particiPantservice: ParticipantService
 }
 
-type ServiceContextType = {
+export type ServiceContextType = {
     services: Services;
 }
 
@@ -20,12 +22,12 @@ type ServiceProviderProps = {
     children: ReactNode;
 }
 
-export const ServiceProvider:React.FC<ServiceProviderProps> = ({ children, ...props}) => {
+export const ServiceProvider: React.FC<ServiceProviderProps> = ({ children }) => {
     const [services] = useState<Services>({
         privateParticipantService: new PrivateParticipantService(),
         businessParticipantService: new BusinessParticipantService(),
-        eventserveice: new EventService()
-
+        eventServeice: new EventService(),
+        particiPantservice: new ParticipantService()
     });
     return <ServiceContex.Provider value={{services}}>{ children }</ServiceContex.Provider>
 };

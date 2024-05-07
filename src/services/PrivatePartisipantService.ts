@@ -2,14 +2,31 @@ import { IPrivateParticipant } from "../domain/IPrivateParticipant";
 import httpClient from "../utils/httpclient";
 
 export class PrivateParticipantService {
-    private basePath = 'PrivateParticipant'
+    private basePath = 'privateparticipant'
 
-    async getAll(): Promise<IPrivateParticipant[]> {
+    async getAllForEvent(id: string): Promise<IPrivateParticipant[]> {
         console.log("getAll");
-        const response = await httpClient.get(`/${this.basePath}`);
+        const response = await httpClient.get(`/event/${id}/getAllPrivate`);
         console.log(response);
 
         const res = await response.data as IPrivateParticipant[];
+        return res;
+    }
+
+    async put(id: string, data: IPrivateParticipant): Promise<number> {
+        console.log("getAll");
+        const response = await httpClient.put(`/privateparticipant/${id}`, data);
+        console.log(response);
+
+        return response.status;
+    }
+
+    async getById(id: string): Promise<IPrivateParticipant> {
+        console.log("getById");
+        const response = await httpClient.get(`/${this.basePath}/${id}`);
+        console.log(response);
+
+        const res = await response.data as IPrivateParticipant;
         return res;
     }
 

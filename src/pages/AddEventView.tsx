@@ -4,7 +4,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { EventService } from '../services/EventService';
 import { IEvent } from '../domain/IEvent';
 import { Link, useNavigate } from 'react-router-dom';
-export const AddEvent = () => {
+
+export const AddEventView = () => {
     const navigate  = useNavigate()
     const [name, setName] = useState<string>('');
     const [location, setLocation] = useState<string>('');

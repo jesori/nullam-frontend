@@ -1,9 +1,9 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
-import { useServiceContext } from '../context/ServiceContext';
 import { ParticipantType } from '../domain/ParticipanType';
 import { PaymentMethod } from '../domain/PaymentMethod';
-import { Button } from '@mui/joy';
+import { Button, Input, Option, Radio, Select, Textarea } from '@mui/joy';
+import { validateId } from '../services/PrivatePartisipantService';
 
 export type FormData = {
     type: ParticipantType,
@@ -23,10 +23,6 @@ type ParticipantFormProps = {
     onSubmit: (data: FormData) => void
 }
 export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initialData, onSubmit}) => {
-    const { services: {
-        privateParticipantService,
-    } } = useServiceContext()
-
     const [formData, setFormData] = useState<FormData>({
         type: 'private',
         firstName: '',
@@ -60,7 +56,7 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
                 valid = false;
             }
             
-            if (!privateParticipantService.validateId(formData.idNumber)) {
+            if (!validateId(formData.idNumber)) {
                 newErrors.push('Id number required or not valid');
                 valid = false;
             }
@@ -80,13 +76,35 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
 
         if (validateForm()) {
             onSubmit(formData)
-            }
+            setFormData({
+                type: 'private',
+                firstName: '',
+                lastName: '',
+                participantsNumber: 1,
+                paymentMethod: PaymentMethod.InCache,
+                idNumber: '',
+                info: ''
+            })
         }
-    return (
-        <div className='flex flex-col w-[20rem] h-fit'>
-            <p className='text-2xl self-start text-[#005aa1] mt-5'>Osavõtjs nimi</p>
-            <div className='mt-5'>
+    }
 
+    const selectOnChange = (
+        event: React.SyntheticEvent | null,
+        newValue: number | null,
+    ) => {
+        console.log(newValue);
+        
+        if (newValue) {
+            setFormData({
+                ...formData,
+                paymentMethod: newValue
+            })
+        }
+    };
+
+    return (
+        <div className='flex flex-col w-full h-fit'>
+            <div className='mt-2'>
                 {errors.length > 0 && errors.map((e, index) => (
                     <p key={index} className='text-red-400 text-start'>&#x2022; {e}</p>
                 ))}
@@ -95,43 +113,36 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
                 <div className="mt-5 w-full grid gap-3 grid-cols-3 h-fit self-center text-start">
                     <p></p>
                     <div className=' flex felx-row h-7 col-span-2'>
-                        <label className='basis-1/2'>
-                            <input
-                                required
-                                disabled={eventId === undefined}
-                                className='mr-2'
-                                checked={formData.type === 'private'}
-                                type="radio"
-                                value="private"
-                                onChange={() => setFormData({
-                                    ...formData,
-                                    type: 'private'
-                                })}
-                            />
-                            Eraisik
-                        </label>
-                        <label className='basis-1/2'>
-                            <input
-                                disabled={eventId === undefined}
-                                className='mr-2'
-                                checked={formData.type === 'business'}
-                                type="radio"
-                                value="business"
-                                onChange={() => setFormData({
-                                    ...formData,
-                                    type: 'business'
-                                })}
-                            />
-                            Ettevõte
-                        </label>
+                        <Radio
+                            required
+                            label='Eraisik'
+                            disabled={eventId === undefined}
+                            className='basis-1/2 mr-2'
+                            checked={formData.type === 'private'}
+                            value="private"
+                            onChange={() => setFormData({
+                                ...formData,
+                                type: 'private'
+                            })}
+                        />
+                        <Radio
+                            disabled={eventId === undefined}
+                            className='basis-1/2 mr-2'
+                            label='Ettevõte'
+                            checked={formData.type === 'business'}
+                            value="business"
+                            onChange={() => setFormData({
+                                ...formData,
+                                type: 'business'
+                            })}
+                        />
                     </div>
                     {formData.type === 'business' ?
                         <>
                             <p> Nimi:</p>
-                            <input
+                            <Input
                                 required
                                 className='border h-7 col-span-2'
-                                name="isGoing"
                                 type=''
                                 value={formData.firstName}
                                 onChange={(e) => setFormData({
@@ -139,21 +150,24 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
                                     firstName: e.target.value
                                 })} />
                             <p>Registrikood:</p>
-                            <input
+                            <Input
                                 className='border h-7 col-span-2'
-                                name="isGoing"
-                                type=''
                                 value={formData.idNumber}
                                 onChange={(e) => setFormData({
                                     ...formData,
                                     idNumber: e.target.value
                                 })} />
                             <p>Osavõtjate arv:</p>
-                            <input
+                            <Input
                                 className='border h-7 col-span-2'
-                                name="isGoing"
                                 type='number'
-                                min="1" max="100"
+                                slotProps={{
+                                    input: {
+                                      min: 1,
+                                      max: 99,
+                                      step: 1,
+                                    },
+                                  }}
                                 value={formData.participantsNumber}
                                 onChange={(e) => setFormData({
                                     ...formData,
@@ -163,7 +177,7 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
                         :
                         <>
                             <p>Eesnimi:</p>
-                            <input
+                            <Input
                                 className='border h-7 col-span-2'
                                 name="isGoing"
                                 value={formData.firstName}
@@ -173,7 +187,7 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
                                     firstName: e.target.value
                                 })} />
                             <p>Perenimi:</p>
-                            <input
+                            <Input
                                 className='border h-7 col-span-2'
                                 name="isGoing"
                                 value={formData.lastName}
@@ -183,7 +197,7 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
                                     lastName: e.target.value
                                 })} />
                             <p>Isikukood:</p>
-                            <input
+                            <Input
                                 className='border h-7 col-span-2'
                                 name="isGoing"
                                 value={formData.idNumber}
@@ -195,19 +209,15 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
                         </>
                     }
                     <p>Maksmisviis:</p>
-                    <select className='border h-7 col-span-2'
-                        value={formData.paymentMethod === PaymentMethod.InCache ? 'sularaha' : 'pangaülekanne'}
-                        onChange={(e) => setFormData({
-                            ...formData,
-                            paymentMethod: e.target.value === 'sularaha' ? PaymentMethod.InCache : PaymentMethod.ByCard
-                        })}>
-                        <option>sularaha</option>
-                        <option>pangaülekanne</option>
-                    </select>
+                    <Select className='border h-7 col-span-2'
+                        defaultValue={formData.paymentMethod}
+                        onChange={selectOnChange}>
+                        <Option value={PaymentMethod.InCache}>sularaha</Option>
+                        <Option value={PaymentMethod.ByCard}>pangaülekanne</Option>
+                    </Select>
                     <p>Lisainfo:</p>
-                    <textarea
-                        maxLength={1500}
-                        className='border w-full col-span-2 h-[3rem] text-start'
+                    <Textarea
+                        className='border w-full col-span-2 h-[4rem] text-start'
                         name="isGoing"
                         value={formData.info}
                         onChange={(e) => setFormData({

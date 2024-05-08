@@ -2,6 +2,6 @@ export interface IEvent {
     id?: string,
     name: string;
     location: string;
-    date: Date;
+    date: string;
     info?: string;
 }

@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import ReactDatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { IEvent } from '../domain/IEvent';
 import { Link, useNavigate } from 'react-router-dom';
-import { useServiceContext } from '../context/ServiceContext';
 import { Button, Input, Textarea } from '@mui/joy';
-import Datepicker from 'react-tailwindcss-datepicker';
 import { PageHeader } from '../composents/PageHeader';
+import { addEvent } from '../services/EventService';
+import { useMutation } from '@tanstack/react-query';
 
 export const AddEventView = () => {
     const navigate  = useNavigate()
@@ -14,33 +14,33 @@ export const AddEventView = () => {
     const [location, setLocation] = useState<string>('');
     const [eventDate, setEventDate] = useState<Date | null>(new Date);
     const [info, setInfo] = useState<string>('');
-    const { services } = useServiceContext();
-    useEffect(() => {
-        console.log(name);
-
-    }, [name]);
-
-    const addEvent = async () =>{
+    const eventMutation = useMutation({mutationFn: (event: IEvent) => addEvent(event)})
+    const addEventOnClick = async () =>{
         if (name.length > 0 && eventDate && location?.length > 0) {
             const event: IEvent = {
                 name: name,
                 location: location,
-                date: eventDate,
+                date: new Date(eventDate).toISOString(),
                 info: info
             }
-            const res = await services.eventServeice.add(event)
-            if (res) {
-                navigate('/')
-            }
-
+            console.log(new Date(eventDate.toUTCString()).toISOString());
+            
+            eventMutation.mutateAsync(event)
         }
+    }
+    
+    if (eventMutation.isSuccess) {
+        navigate('/')
     }
     return (
         <div className='h-full flex flex-col'>
             <PageHeader content='Ürituse lisamine'></PageHeader>
             <div className='bg-white flex justify-center h-full p-3'>
                 <div className='flex flex-col w-[20rem] h-fit'>
-                    <p className='text-2xl self-start text-[#005aa1] mt-5'>Urituse lisamine</p>
+                    <p className='text-2xl self-start text-[#005aa1] mt-5'>Ürituse lisamine</p>
+                    {eventMutation.error &&
+                        <p className='text-start mt-3 text-red-500'>Ürituse loomisel tekkis viga</p>
+                    }
                     <div className="mt-5 w-full grid gap-3 grid-cols-3 h-fit self-center text-start">
                         <p>Urituse nimi:</p>
                         <Input
@@ -73,7 +73,7 @@ export const AddEventView = () => {
                             <Link to={'/'}>
                                 <Button  color="neutral" size='sm' className='bg-[#e1e1e1] px-3'>Tagasi</Button>
                             </Link>
-                            <Button size='sm' className='bg-[#005aa1] text-white px-3' onClick={() => addEvent()}>Lisa</Button>
+                            <Button size='sm' loading={eventMutation.isPending} className='bg-[#005aa1] text-white px-3' onClick={() => addEventOnClick()}>Lisa</Button>
                         </div>
                     </div>
                 </div>

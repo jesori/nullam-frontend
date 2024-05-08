@@ -7,7 +7,7 @@ export const Header = () => {
     const location = useLocation();
 
     return (
-        <div className='w-full h-[4rem] bg-white my-5 flex flex-row pl-5 pr-5'>
+        <div className='w-full h-[4rem] bg-white my-3 flex flex-row pl-5 pr-5'>
             <img className='m-3' src={logo} alt="" />
             <div className='grow flex ml-[5rem]'>
 

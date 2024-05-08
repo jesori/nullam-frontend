@@ -1,51 +1,47 @@
 import { IBusinessParticipant } from "../domain/IBusinessParticipant";
-import { IPrivateParticipant } from "../domain/IPrivateParticipant";
 import httpClient from "../utils/httpclient";
 
-export class BusinessParticipantService {
-    private basePath = 'businessparticipant'
+const BASEPATH = 'businessparticipant'
 
-    async getAllForEvent(id: string): Promise<IBusinessParticipant[]> {
-        console.log("getAll");
-        const response = await httpClient.get(`/event/${id}/getAllBusiness`);
-        console.log(response);
+export async function getAllBPartForEvent(id: string): Promise<IBusinessParticipant[]> {
+    console.log("getAll");
+    const response = await httpClient.get(`/event/${id}/getAllBusiness`);
+    console.log(response);
 
-        const res = await response.data as IBusinessParticipant[];
-        return res;
-    }
+    const res = await response.data as IBusinessParticipant[];
+    return res;
+}
 
-    async getAll(): Promise<IBusinessParticipant[]> {
-        console.log("getAll");
-        const response = await httpClient.get(`/${this.basePath}`);
-        console.log(response);
+export async function getAllBPart(): Promise<IBusinessParticipant[]> {
+    console.log("getAll");
+    const response = await httpClient.get(`/${BASEPATH}`);
+    console.log(response);
 
-        const res = await response.data as IBusinessParticipant[];
-        return res;
-    }
+    const res = await response.data as IBusinessParticipant[];
+    return res;
+}
 
-    async add(data: IBusinessParticipant): Promise<string> {
-        console.log("getAll");
-        const response = await httpClient.post(`/${this.basePath}`, data);
-        console.log(response);
+export async function addBPart(data: IBusinessParticipant): Promise<string> {
+    console.log("add bpart");
+    const response = await httpClient.post(`/${BASEPATH}`, data);
+    console.log(response);
 
-        return response.data as string;
-    }
+    return response.data as string;
+}
 
-    async put(id: string, data: IBusinessParticipant): Promise<number> {
-        console.log("put");
-        const response = await httpClient.put(`/${this.basePath}/${id}`, data);
-        console.log(response);
+export async function putBPart(id: string, data: IBusinessParticipant): Promise<number> {
+    console.log("put");
+    const response = await httpClient.put(`/${BASEPATH}/${id}`, data);
+    console.log(response);
 
-        return response.status;
-    }
+    return response.status;
+}
 
-    async getById(id: string): Promise<IBusinessParticipant> {
-        console.log("getById");
-        const response = await httpClient.get(`/${this.basePath}/${id}`);
-        console.log(response);
+export async function getBPartById(id: string): Promise<IBusinessParticipant> {
+    console.log("getById");
+    const response = await httpClient.get(`/${BASEPATH}/${id}`);
+    console.log(response);
 
-        const res = await response.data as IBusinessParticipant;
-        return res;
-    }
-
+    const res = await response.data as IBusinessParticipant;
+    return res;
 }

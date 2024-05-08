@@ -1,32 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { IEvent } from '../domain/IEvent'
-import { EventService } from '../services/EventService'
+import React from 'react'
+import { getAllEvents } from '../services/EventService'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
-import { useServiceContext } from '../context/ServiceContext'
-import { PageHeader } from './PageHeader'
+import { useQuery } from '@tanstack/react-query'
 
 type Props = {
     className?: string
 }
 
 export const OngoingEvents: React.FC<Props> = ({className}) => {
-    const { services: {
-        eventServeice
-    } } = useServiceContext()
-    const [events, setEvents] = useState<IEvent[]>([])
-
-    useEffect(() => {
-        const getData = async () => {
-            try {
-                const data = await eventServeice.getAll();
-                setEvents(data.filter(e => moment(e.date).isAfter(Date.now())))
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        getData()
-    }, []);
+    const {data: events} = useQuery({queryFn: getAllEvents, queryKey: ['events']})
+    console.log(events);
+    
 
     return (
         <div className={`${className} flex flex-col`}>
@@ -36,7 +21,7 @@ export const OngoingEvents: React.FC<Props> = ({className}) => {
             </p>
             </div>
             <div className='bg-white h-full '>
-                {events.map((event, index) => (
+                {events?.filter(e => moment(e.date).isAfter(Date.now())).map((event, index) => (
                     <div className='w-full px-5 mt-2 text-slate-500 text-start justify-items-start gap-3  grid grid-cols-[20px_1fr_auto_auto_auto]'>
                         <p>{index + 1}.</p>
                         <p>{event.name}</p>

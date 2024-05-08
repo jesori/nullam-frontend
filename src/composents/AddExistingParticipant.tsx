@@ -1,54 +1,48 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useServiceContext } from '../context/ServiceContext'
-import { IPatricipant } from '../domain/IParticipant'
-import { Button } from '@mui/joy'
+import { Button, Option, Select } from '@mui/joy'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { getAllparticipants } from '../services/ParticipantService'
+import { addBusinessParticipantToEvent, addPrivateParticipantToEvent } from '../services/EventService'
 
 type AddExistingParticipantProps = {
     eventId?: string
 }
 export const AddExistingParticipant:React.FC<AddExistingParticipantProps> = ({ eventId }) => {
-    const { services: {
-        participantService,
-        eventServeice
-    } } = useServiceContext()
-
-    const [participants, setParticipants] = useState<IPatricipant[]>()
-    const [selected, setSelected] = useState<number>()
-
-    const getParticipants = async () => {
-        const participants = await participantService.getAll()
-        if (participants) {
-            setParticipants(participants)
-        }
-    }
-    useEffect(() => {
-        getParticipants()
-    }, []);
+    const [selected, setSelected] = useState<number>(0)
+    const {data: participants} = useQuery({queryFn: getAllparticipants, queryKey: ['participants']})
+    const addPrivateMuatation = useMutation({mutationFn: ({eventId, participantId}: {eventId: string, participantId: string}) =>  addPrivateParticipantToEvent(eventId, participantId)})
+    const addBusinessMuatation = useMutation({mutationFn: ({eventId, participantId}: {eventId: string, participantId: string}) =>  addBusinessParticipantToEvent(eventId, participantId)})
 
     const addSelectedToEvent = async () => {
-        if (selected && eventId && participants) {
+        if (participants && eventId) {
+            console.log('asd2');
             const participant = participants[selected]
-            if (participants[selected].type === 'private' && participant.id) {
-                await eventServeice.addPrivateParticipantToEvent(eventId, participant.id)
-            } else if (participants[selected].type === 'business' && participant.id) {
-                await eventServeice.addBusinessParticipantToEvent(eventId, participant.id)
+            if (participant.type === 'private' && participant.id) {
+                await addPrivateMuatation.mutateAsync({eventId: eventId, participantId: participant.id})
+            } else if (participant.type === 'business' && participant.id) {
+                await addBusinessMuatation.mutateAsync({eventId: eventId, participantId: participant.id})
             }
         }
     }
+
+    const handleChange = (
+        event: React.SyntheticEvent | null,
+        newValue: number | null,
+    ) => {
+        if (newValue) {
+            setSelected(newValue)
+        }
+    };
     return (
-        <div className='w-[25rem] h-full flex flex-col gap-4'>
-            <select className='w-[20rem]' onChange={e => setSelected(Number.parseInt(e.target.value))}>
+        <div className='w-[25rem] h-full flex flex-col gap-4 pt-7'>
+            <Select className='w-[20rem] self-center align-top' defaultValue={0} onChange={handleChange}>
                 {participants?.map((p, index) => (
-                    <option key={index} className='w-[20rem]' value={index}>
-                        <div className='grid grid-cols-2 bg-orange-300'>
-                            <p className='ml-10'>
-                                {`${p.name} ${p.idNumber}`}
-                            </p>
-                        </div>
-                    </option>
+                    <Option key={index} value={index}>
+                        {`${p.name} ${p.idNumber}`}
+                    </Option>
                 ))}
-            </select>
+            </Select>
             <div className='flex flex-row space-x-4 mt-5'>
                 <Link to={'/'}>
                     <Button color="neutral" size='sm' className='bg-[#e1e1e1] px-3'>Tagasi</Button>

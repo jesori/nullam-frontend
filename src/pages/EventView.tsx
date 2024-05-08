@@ -23,12 +23,6 @@ export const EventView = () => {
     const addBusinessToEnetMuatation = useMutation({mutationFn: ({eventId, participantId}: {eventId: string, participantId: string}) => addBusinessParticipantToEvent(eventId, participantId)})
     const businessMutation = useMutation({ mutationFn: addBPart })
 
-    // useEffect(() => {
-    //     if ( moment(Date.now()).isAfter(e.date)) {
-    //         setCanAdd(e)
-    //     }
-    // }, [event]);
-    
     const addParticipant = async (data: FormData) => {
         if (id) {
             if (data.type === 'private') {
@@ -73,6 +67,8 @@ export const EventView = () => {
                             <div className='col-span-2 ml-10'>{moment(event.date).format('DD.MM.yyyy hh:mm').toString()}</div>
                             <p>Koht:</p>
                             <div className='col-span-2 ml-10'>{event.location}</div>
+                            <p>Lisainfo:</p>
+                            <div className='col-span-2 ml-10 max-h-[10rem] overflow-y-auto'>{event?.info}</div>
                             <p>Osavotjad:</p>
                             <div className='col-span-2 ml-10 max-h-[7rem]'>
                                 {event.id &&

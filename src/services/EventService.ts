@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import { IEvent } from "../domain/IEvent";
 import httpClient from "../utils/httpclient";
 
@@ -16,6 +17,9 @@ export async function getEventById(id: string): Promise<IEvent> {
     console.log("getById");
     const response = await httpClient.get(`/${BASEPATH}/${id}`);
     const res = await response.data as IEvent;
+    console.log(res.date.toLocaleString());
+    
+    res.date = new Date(res.date).toLocaleString()
     return res;
 }
 
@@ -25,6 +29,12 @@ export async function addEvent(event: IEvent): Promise<string> {
 
     const res = await response.data as string;
     return res;
+}
+
+export async function removeEvent(id: string): Promise<AxiosResponse> {
+    console.log("removeevent");
+    const response = await httpClient.delete(`/${BASEPATH}/${id}`);
+    return response;
 }
 
 export async function addPrivateParticipantToEvent(eventId: string, participantId: string): Promise<number> {

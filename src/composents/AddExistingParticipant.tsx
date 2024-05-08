@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Option, Select } from '@mui/joy'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getAllparticipants } from '../services/ParticipantService'
 import { addBusinessParticipantToEvent, addPrivateParticipantToEvent } from '../services/EventService'
 
@@ -10,18 +10,22 @@ type AddExistingParticipantProps = {
 }
 export const AddExistingParticipant:React.FC<AddExistingParticipantProps> = ({ eventId }) => {
     const [selected, setSelected] = useState<number>(0)
+    const queryClient = useQueryClient();
     const {data: participants} = useQuery({queryFn: getAllparticipants, queryKey: ['participants']})
     const addPrivateMuatation = useMutation({mutationFn: ({eventId, participantId}: {eventId: string, participantId: string}) =>  addPrivateParticipantToEvent(eventId, participantId)})
     const addBusinessMuatation = useMutation({mutationFn: ({eventId, participantId}: {eventId: string, participantId: string}) =>  addBusinessParticipantToEvent(eventId, participantId)})
 
     const addSelectedToEvent = async () => {
         if (participants && eventId) {
-            console.log('asd2');
             const participant = participants[selected]
             if (participant.type === 'private' && participant.id) {
-                await addPrivateMuatation.mutateAsync({eventId: eventId, participantId: participant.id})
+                await addPrivateMuatation.mutateAsync({eventId: eventId, participantId: participant.id}, {onSuccess: () =>{
+                    queryClient.invalidateQueries({queryKey: [`eventparticipants`, eventId]});
+                }})
             } else if (participant.type === 'business' && participant.id) {
-                await addBusinessMuatation.mutateAsync({eventId: eventId, participantId: participant.id})
+                await addBusinessMuatation.mutateAsync({eventId: eventId, participantId: participant.id}, {onSuccess: () =>{
+                    queryClient.invalidateQueries({queryKey: [`eventparticipants`, eventId]});
+                }})
             }
         }
     }

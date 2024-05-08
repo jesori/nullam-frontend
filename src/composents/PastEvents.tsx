@@ -20,7 +20,7 @@ export const PastEvents: React.FC<Props> = ({ className }) => {
             </div>
             <div className='bg-white h-full '>
                 {events?.filter(e => moment(Date.now()).isAfter(e.date)).map((event, index) => (
-                    <div className='w-full px-5 mt-2 text-slate-500 text-start justify-items-start gap-3  grid grid-cols-[20px_1fr_auto_auto]'>
+                    <div key={index} className='w-full px-5 mt-2 text-slate-500 text-start justify-items-start gap-3  grid grid-cols-[20px_1fr_auto_auto]'>
                         <p>{index + 1}.</p>
                         <p>{event.name}</p>
                         <p>{moment(event.date).format('DD.MM.yyyy').toString()}</p>

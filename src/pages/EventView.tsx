@@ -56,8 +56,7 @@ export const EventView = () => {
         <div className='flex flex-col h-full'>
             <PageHeader content='Osavõtjad'/>
             <div className='flex flex-col w-full bg-white h-full py-3'>
-                <div className='flex flex-col w-[25rem] self-center h-fit overflow-visible'>
-
+                <div className='flex flex-col w-[35rem] self-center h-fit overflow-visible'>
                     <p className='text-2xl self-start text-[#005aa1] mt-3'>Osavõtjad</p>
                     {event != null &&
                         <div className='mt-5 w-full grid gap-1 grid-cols-3 h-fit self-center text-start'>
@@ -72,14 +71,14 @@ export const EventView = () => {
                             <p>Osavotjad:</p>
                             <div className='col-span-2 ml-10 max-h-[7rem]'>
                                 {event.id &&
-                                    <EventParticipants id={event.id} />
+                                    <EventParticipants canRemove={moment(event?.date).isAfter(Date.now())} id={event.id} />
                                 }
                             </div>
                         </div>
                     }
                 </div>
                 {moment(event?.date).isAfter(Date.now()) ?
-                    <div className=' self-center h-fit w-[25rem] flex flex-col mt-7'>
+                    <div className=' self-center h-fit w-[35rem] flex flex-col mt-7'>
                         <div className='flex flex-row'>
 
                             <p className='text-2xl text-start self-start grow text-[#005aa1] w-fit mt-5'>Osavõtja nimi</p>
@@ -107,7 +106,7 @@ export const EventView = () => {
                         </div>
                     </div>
                     :
-                    <div className='w-[25rem] self-center flex'>
+                    <div className='w-[35rem] self-center flex'>
                         <Link className='self-start mt-4' to={'/'}>
                             <Button color="neutral" size='sm' className='bg-[#e1e1e1] px-3'>Tagasi</Button>
                         </Link>

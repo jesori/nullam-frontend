@@ -6,8 +6,9 @@ import { removeBusinessParticipantFromEvent } from '../services/EventService'
 
 type EventParticipantsProps = {
     id:string
+    canRemove: boolean
 }
-export const EventParticipants:React.FC<EventParticipantsProps> = ({ id }) => {
+export const EventParticipants:React.FC<EventParticipantsProps> = ({ id, canRemove }) => {
     const {data: participants, refetch} = useQuery({queryFn: () => getAllparticipantsForEvent(id), queryKey:  [`eventparticipants`, id]})
     const removeMutation = useMutation({mutationFn: removeBusinessParticipantFromEvent, onSuccess: () => refetch()})
     return (
@@ -19,9 +20,11 @@ export const EventParticipants:React.FC<EventParticipantsProps> = ({ id }) => {
                             </p>
                             <p className='self-start text-start'>{p.idNumber}</p>
                             <Link to={{ pathname: `/participant/${p.id}`, search: `?type=${p.type}` }}>VAATA</Link>
-                            <button onClick={() => { if (p.participantEventId) removeMutation.mutate(p.participantEventId) }}>
-                                KUSTUTA
-                            </button>
+                            {canRemove &&
+                                <button onClick={() => { if (p.participantEventId) removeMutation.mutate(p.participantEventId) }}>
+                                    KUSTUTA
+                                </button>
+                            }
                         </div>
                     ))}
         </div>

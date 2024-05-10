@@ -50,9 +50,10 @@ export const AddEventView = () => {
                             onChange={(e) => setName(e.target.value)} />
                         <p>Toimumisaeg:</p>
                         <div className='w-full col-span-2'>
-                            <ReactDatePicker className='border h-7'
+                            <ReactDatePicker className='h-9 w-[13rem] bg-[#fbfcfe] border border-[#cdd7e1] focus:outline-[#005aa1] rounded-md'
                                 selected={eventDate}
                                 minDate={new Date}
+                                onFocus={()=> console.log('focused')}
                                 dateFormat="dd.MM.yyyy hh:mm"
                                 showTimeSelect
                                 onChange={(date) => setEventDate(date)}></ReactDatePicker>

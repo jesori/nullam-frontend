@@ -39,7 +39,7 @@ export const AddExistingParticipant:React.FC<AddExistingParticipantProps> = ({ e
         }
     };
     return (
-        <div className='w-[25rem] h-full flex flex-col gap-4 pt-7'>
+        <div className='w-[35rem] h-full flex flex-col gap-4 pt-7'>
             <Select className='w-[20rem] self-center align-top' defaultValue={0} onChange={handleChange}>
                 {participants?.map((p, index) => (
                     <Option key={index} value={index}>

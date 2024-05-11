@@ -92,9 +92,8 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
         event: React.SyntheticEvent | null,
         newValue: number | null,
     ) => {
-        console.log(newValue);
-        
-        if (newValue) {
+        event?.preventDefault()
+        if (newValue !== null) {
             setFormData({
                 ...formData,
                 paymentMethod: newValue
@@ -210,7 +209,7 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
                     }
                     <p>Maksmisviis:</p>
                     <Select className='border h-7 col-span-2'
-                        defaultValue={formData.paymentMethod}
+                        value={formData.paymentMethod}
                         onChange={selectOnChange}>
                         <Option value={PaymentMethod.InCache}>sularaha</Option>
                         <Option value={PaymentMethod.ByCard}>pangaülekanne</Option>

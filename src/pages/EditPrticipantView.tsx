@@ -22,7 +22,6 @@ export const EditParticipantView = () => {
         const getParticipant = async () => {
             
             if (searchParams && id) {
-                console.log(searchParams, id, searchParams.get('type'));
                 if (searchParams.get('type') == 'private') {
                     
                     const part = await getPPartById(id)
@@ -41,8 +40,6 @@ export const EditParticipantView = () => {
                 }
                 if (searchParams.get('type') == 'business') {
                     const part = await getBPartById(id)
-                    console.log('part');
-                    console.log(part);
                     if (part) {
                         setInitialData({
                             firstName: part.name,

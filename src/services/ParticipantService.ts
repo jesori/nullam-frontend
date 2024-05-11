@@ -8,7 +8,6 @@ import { getAllPPart } from "./PrivatePartisipantService";
 export async function getAllparticipantsForEvent(id: string): Promise<IPatricipant[]> {
     console.log("getAllpart");
     const response = await httpClient.get(`/event/${id}/getAllParticipants`);
-    console.log(response);
 
     const allParticipants = response.data as IEventParticipant[]
     const participants: IPatricipant[] = []

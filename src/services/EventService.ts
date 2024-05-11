@@ -5,26 +5,22 @@ import httpClient from "../utils/httpclient";
 const BASEPATH = 'Event'
 
 export async function getAllEvents(): Promise<IEvent[]> {
-    console.log("getAll");
+    console.log("getAllEvents");
     const response = await httpClient.get(`/${BASEPATH}`);
-    console.log(response);
-
     const res = await response.data as IEvent[];
     return res;
 }
 
 export async function getEventById(id: string): Promise<IEvent> {
-    console.log("getById");
+    console.log("getEventById");
     const response = await httpClient.get(`/${BASEPATH}/${id}`);
     const res = await response.data as IEvent;
-    console.log(res.date.toLocaleString());
-    
     res.date = new Date(res.date).toLocaleString()
     return res;
 }
 
 export async function addEvent(event: IEvent): Promise<string> {
-    console.log("add");
+    console.log("addEvent");
     const response = await httpClient.post(`/${BASEPATH}`, event);
 
     const res = await response.data as string;
@@ -32,7 +28,7 @@ export async function addEvent(event: IEvent): Promise<string> {
 }
 
 export async function removeEvent(id: string): Promise<AxiosResponse> {
-    console.log("removeevent");
+    console.log("removeEvent");
     const response = await httpClient.delete(`/${BASEPATH}/${id}`);
     return response;
 }

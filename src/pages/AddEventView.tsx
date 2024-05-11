@@ -23,8 +23,6 @@ export const AddEventView = () => {
                 date: new Date(eventDate).toISOString(),
                 info: info
             }
-            console.log(new Date(eventDate.toUTCString()).toISOString());
-            
             eventMutation.mutateAsync(event)
         }
     }
@@ -53,7 +51,6 @@ export const AddEventView = () => {
                             <ReactDatePicker className='h-9 w-[13rem] bg-[#fbfcfe] border border-[#cdd7e1] focus:outline-[#005aa1] rounded-md'
                                 selected={eventDate}
                                 minDate={new Date}
-                                onFocus={()=> console.log('focused')}
                                 dateFormat="dd.MM.yyyy hh:mm"
                                 showTimeSelect
                                 onChange={(date) => setEventDate(date)}></ReactDatePicker>

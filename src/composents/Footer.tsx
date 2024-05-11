@@ -1,5 +1,3 @@
-import React from 'react'
-
 export const Footer = () => {
   return (
     <div className='bg bg-[#3a3a3a] justify-items-center w-full h-[15rem] p-4 my-3 grid grid-cols-4'>

@@ -4,44 +4,35 @@ import httpClient from "../utils/httpclient";
 const BASEPATH = 'privateparticipant'
 
 export async function getAllPPartForEvent(id: string): Promise<IPrivateParticipant[]> {
-    console.log("getAll");
+    console.log("getAllPpartForEvent");
     const response = await httpClient.get(`/event/${id}/getAllPrivate`);
-    console.log(response);
 
     const res = await response.data as IPrivateParticipant[];
     return res;
 }
 
 export async function getAllPPart(): Promise<IPrivateParticipant[]> {
-    console.log("getAll");
+    console.log("getAllPpart");
     const response = await httpClient.get(`/${BASEPATH}`);
-    console.log(response);
-
     const res = await response.data as IPrivateParticipant[];
     return res;
 }
 
 export async function addPPart(data: IPrivateParticipant): Promise<string> {
-    console.log("getAll");
+    console.log("addPpart");
     const response = await httpClient.post(`/${BASEPATH}`, data);
-    console.log(response);
-
     return response.data as string;
 }
 
 export async function putPPart(id: string, data: IPrivateParticipant): Promise<number> {
-    console.log("getAll");
+    console.log("putPpart");
     const response = await httpClient.put(`/${BASEPATH}/${id}`, data);
-    console.log(response);
-
     return response.status;
 }
 
 export async function getPPartById(id: string): Promise<IPrivateParticipant> {
-    console.log("getById");
+    console.log("getPpartById");
     const response = await httpClient.get(`/${BASEPATH}/${id}`);
-    console.log(response);
-
     const res = await response.data as IPrivateParticipant;
     return res;
 }

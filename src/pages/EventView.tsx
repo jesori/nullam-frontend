@@ -87,6 +87,7 @@ export const EventView = () => {
                                 <ToggleButtonGroup
                                     value={value}
                                     onChange={(event, newValue) => {
+                                        event.preventDefault()
                                         setValue(newValue);
                                     }}>
                                     <Button className='w-fit p-0' value="new">Uus</Button>

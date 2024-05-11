@@ -34,7 +34,8 @@ export const AddExistingParticipant:React.FC<AddExistingParticipantProps> = ({ e
         event: React.SyntheticEvent | null,
         newValue: number | null,
     ) => {
-        if (newValue) {
+        event?.preventDefault()
+        if (newValue != null) {
             setSelected(newValue)
         }
     };

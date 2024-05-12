@@ -41,14 +41,19 @@ export const AddEventView = () => {
                     }
                     <div className="mt-5 w-full grid gap-3 grid-cols-3 h-fit self-center text-start">
                         <p>Urituse nimi:</p>
-                        <Input
-                            className='border h-7 col-span-2'
+                        <Input  size='sm'
+                            className='border h-7 col-span-2 max'
+                            slotProps={{
+                                input: {
+                                      maxLength: 30,
+                                },
+                              }}
                             name="isGoing"
                             type=''
                             onChange={(e) => setName(e.target.value)} />
                         <p>Toimumisaeg:</p>
                         <div className='w-full col-span-2'>
-                            <ReactDatePicker className='h-9 w-[13rem] bg-[#fbfcfe] border border-[#cdd7e1] focus:outline-[#005aa1] rounded-md'
+                            <ReactDatePicker className='h-8 w-[13rem] bg-[#fbfcfe] border border-[#cdd7e1] focus:outline-[#005aa1] rounded-md'
                                 selected={eventDate}
                                 minDate={new Date}
                                 dateFormat="dd.MM.yyyy hh:mm"
@@ -56,13 +61,23 @@ export const AddEventView = () => {
                                 onChange={(date) => setEventDate(date)}></ReactDatePicker>
                         </div>
                         <p>Koht:</p>
-                        <Input
+                        <Input  size='sm'
                             className='border h-7 col-span-2'
                             name="isGoing"
                             type=''
+                            slotProps={{
+                                input: {
+                                      maxLength: 30,
+                                },
+                              }}
                             onChange={(e) => setLocation(e.target.value)} />
                         <p>Lisainfo:</p>
                         <Textarea 
+                            slotProps={{
+                                textarea: {
+                                      maxLength: 5000,
+                                },
+                              }}
                             minRows={2}
                             className='border w-full col-span-2 h-[4rem] text-start'
                             name="isGoing"

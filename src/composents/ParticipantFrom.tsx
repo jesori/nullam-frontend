@@ -139,7 +139,12 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
                     {formData.type === 'business' ?
                         <>
                             <p> Nimi:</p>
-                            <Input
+                            <Input size='sm'
+                                slotProps={{
+                                    input: {
+                                          maxLength: 30,
+                                    },
+                                  }}
                                 required
                                 className='border h-7 col-span-2'
                                 type=''
@@ -149,7 +154,13 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
                                     firstName: e.target.value
                                 })} />
                             <p>Registrikood:</p>
-                            <Input
+                            <Input size='sm'
+                                slotProps={{
+                                    input: {
+                                          maxLength: 20,
+                                    },
+                                  }}
+                                required
                                 className='border h-7 col-span-2'
                                 value={formData.idNumber}
                                 onChange={(e) => setFormData({
@@ -157,7 +168,7 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
                                     idNumber: e.target.value
                                 })} />
                             <p>Osavõtjate arv:</p>
-                            <Input
+                            <Input  size='sm'
                                 className='border h-7 col-span-2'
                                 type='number'
                                 slotProps={{
@@ -176,7 +187,13 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
                         :
                         <>
                             <p>Eesnimi:</p>
-                            <Input
+                            <Input size='sm'
+                                slotProps={{
+                                    input: {
+                                          maxLength: 30,
+                                    },
+                                  }}
+                                required
                                 className='border h-7 col-span-2'
                                 name="isGoing"
                                 value={formData.firstName}
@@ -186,17 +203,29 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
                                     firstName: e.target.value
                                 })} />
                             <p>Perenimi:</p>
-                            <Input
+                            <Input size='sm'
+                                slotProps={{
+                                    input: {
+                                          maxLength: 30,
+                                    },
+                                  }}
+                                required
                                 className='border h-7 col-span-2'
                                 name="isGoing"
                                 value={formData.lastName}
-                                type=''
+                                type='text'
                                 onChange={(e) => setFormData({
                                     ...formData,
                                     lastName: e.target.value
                                 })} />
                             <p>Isikukood:</p>
-                            <Input
+                            <Input  size='sm'
+                                required
+                                slotProps={{
+                                    input: {
+                                          maxLength: 11,
+                                    },
+                                  }}
                                 className='border h-7 col-span-2'
                                 name="isGoing"
                                 value={formData.idNumber}
@@ -216,6 +245,11 @@ export const ParticipantFrom:React.FC<ParticipantFormProps> = ({eventId, initial
                     </Select>
                     <p>Lisainfo:</p>
                     <Textarea
+                        slotProps={{
+                            textarea: {
+                                maxLength: formData.type === 'private' ? 1500 : 5000,
+                            },
+                          }}
                         className='border w-full col-span-2 h-[4rem] text-start'
                         name="isGoing"
                         value={formData.info}

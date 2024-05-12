@@ -18,7 +18,7 @@ export const EventParticipants:React.FC<EventParticipantsProps> = ({ id, canRemo
                             <p>{index + 1}.</p>
                             <p className='truncate max-w-[12rem]'>{p.name}
                             </p>
-                            <p className='self-start text-start'>{p.idNumber}</p>
+                            <p className='self-start text-start truncate max-w-[7rem]'>{p.idNumber}</p>
                             <Link to={{ pathname: `/participant/${p.id}`, search: `?type=${p.type}` }}>VAATA</Link>
                             {canRemove &&
                                 <button onClick={() => { if (p.participantEventId) removeMutation.mutate(p.participantEventId) }}>
